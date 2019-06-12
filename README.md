@@ -1,6 +1,10 @@
 # react-dev
 Sandbox for React development
 
+Doing the tutorial from CSS-Tricks: https://css-tricks.com/intro-firebase-react
+
+--- 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
