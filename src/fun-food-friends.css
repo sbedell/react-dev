@@ -16,7 +16,6 @@ header h1 {
   display: inline-block;
   margin: 0;
   vertical-align: middle;
-  
 }
 
 .fa {
@@ -41,27 +40,26 @@ header i {
   margin: 0 auto;
 }
 
+.wrapper button {
+  float: right;
+}
+
 .add-item {
   border-radius: 2px;
   border-top: 3px solid #103D5D;
   margin-right: 50px;
   background-color: rgb(237, 237, 237);
-  padding: 60px 18px;
+  padding: 25px 18px;
   box-shadow: 0 3px 4px 0 rgba(0,0,0,.14), 0 3px 3px -2px rgba(0,0,0,.12), 0 1px 8px 0 rgba(0,0,0,.2);
   margin-bottom: 34px;  
   width: 25%;
   margin-right: auto;
+  max-height: 275px;
 }
 
 .display-item {
   width: 65%;
   margin-left: 50px;
-}
-
-.display-item button {
-  margin-top: 20px;
-  margin-left: auto;
-  display: block;
 }
 
 .add-item form {
@@ -131,4 +129,17 @@ button {
   font-size: 14px;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
   padding: 10px 6px;
+}
+
+.user-profile {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+  width: 100px;
+  height: 100px;
+}
+
+.user-profile img {
+  border-radius: 50%;
+  max-width: 100%;
 }
