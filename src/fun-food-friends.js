@@ -1,3 +1,10 @@
+/**
+ * My Tutorial / Demo for learning React js
+ * 
+ * https://reactjs.org/docs/handling-events.html
+ * https://reactjs.org/docs/state-and-lifecycle.html
+ */
+
 import React, { Component } from 'react';
 import './fun-food-friends.css';
 import firebase from './firebase.js';
@@ -11,7 +18,7 @@ class FunFood extends Component {
       username: '',
       user: null,
       items: []
-    }
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,6 +27,7 @@ class FunFood extends Component {
   }
 
   render() {
+    console.log("Render called");
     return (
       <div className='app'>
         <header>
@@ -36,8 +44,10 @@ class FunFood extends Component {
         <div className='container'>
           <section className='add-item'>
             <form onSubmit={this.handleSubmit}>
-              <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username} />
-              <input type="text" name="currentItem" placeholder="What are you bringing?" onChange={this.handleChange} value={this.state.currentItem} />
+              <input id="usernameInput" type="text" name="username" placeholder="What's your name?" 
+                  onChange={this.handleChange} value={this.state.username} />
+              <input id="itemInput" type="text" name="currentItem" placeholder="What are you bringing?" 
+                  onChange={this.handleChange} value={this.state.currentItem} />
               <button>Add Item</button>
             </form>
           </section>
@@ -67,24 +77,29 @@ class FunFood extends Component {
    * "The componentDidMount() method runs after the component output has been rendered to the DOM." 
    */
   componentDidMount() {
+    console.log("componentDidMount called");
     // TODO - Fix this...when I add new items to this, it doesn't populate it correctly on the page. 
     // It only shows the most recently added item, until the user refreshes the page.
     firebase.firestore().collection("items").onSnapshot(snapshot => {
       console.log("onSnapshot: ", snapshot);
-      let newState = [];
 
       snapshot.docChanges().forEach(change => {
         // console.log("change: ", change);
 
         if (change.type === "added") {
           console.log("Added: ", change.doc.data());
-          var item = change.doc.data();
 
-          newState.push({
+          let item = {
             id: change.doc.id,
-            itemName: item.itemName,
-            username: item.user
-          });
+            itemName: change.doc.data().itemName,
+            username: change.doc.data().user
+          };
+
+          // Add the new item to the state:
+          // calling setState re-calls render()
+          this.setState(prevState => ({
+            items: [...prevState.items, item]
+          }));
         }
         
         if (change.type === "modified") {
@@ -92,16 +107,18 @@ class FunFood extends Component {
         }
         
         if (change.type === "removed") {
+          // Can also access the id via change.doc.id
           console.log("Removed: ", change.doc.data());
 
-          // attempt to remove it from newState
-          // pretty sure change.doc.data() isn't going to pull the correct position...need to fix that too
-          newState.splice(newState.indexOf(change.doc.data()), 1);
+          // Remove the item from the current state:
+          this.setState(prevState => ({
+            items: prevState.items.filter(item => {
+              console.log("item: ", item);
+              console.log("item.id !== change.doc.id? ", item.id !== change.doc.id);
+              return item.id !== change.doc.id;
+            })
+          }));
         }
-      });
-
-      this.setState({
-        items: newState
       });
     }, err => {
       console.error("Encountered error: ", err);
@@ -118,7 +135,14 @@ class FunFood extends Component {
     });  
   }
 
-  // Generic function to handle changes to input boxes
+  /**
+   * Calls when the component gets removed from the DOM:
+   */
+  // componentWillUnmount() { }
+
+  /**
+   * Generic function to handle changes to input boxes
+   */ 
   handleChange(e) {
     this.setState({
       [e.target.name]: e.target.value
@@ -137,9 +161,6 @@ class FunFood extends Component {
     firebase.firestore().collection("items").add(item)
       .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
-
-        // attempt to add this to state?
-        this.state.items.push(item);
       })
       .catch(function(error) {
         console.error("Error adding document: ", error);
@@ -153,7 +174,13 @@ class FunFood extends Component {
   }
 
   removeItem(itemId) {
-    firebase.firestore().collection("items").doc(itemId).delete();
+    firebase.firestore().collection("items").doc(itemId)
+      .delete()
+      .then(function() {
+        console.log("Item successfully deleted!");
+      }).catch(function(error) {
+        console.error("Error removing document: ", error);
+      });;
   }
 
   // TODO - actually link this up...
