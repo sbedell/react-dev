@@ -27,7 +27,7 @@ class FunFood extends Component {
   }
 
   render() {
-    console.log("Render called");
+    // console.log("Render called");
     return (
       <div className='app'>
         <header>
@@ -77,11 +77,11 @@ class FunFood extends Component {
    * "The componentDidMount() method runs after the component output has been rendered to the DOM." 
    */
   componentDidMount() {
-    console.log("componentDidMount called");
-    // TODO - Fix this...when I add new items to this, it doesn't populate it correctly on the page. 
-    // It only shows the most recently added item, until the user refreshes the page.
+    // console.log("componentDidMount called");
+
+    // TODO - Maybe move the firebase.firestore calls into their own functions to call for adding and removing. 
     firebase.firestore().collection("items").onSnapshot(snapshot => {
-      console.log("onSnapshot: ", snapshot);
+      // console.log("onSnapshot: ", snapshot);
 
       snapshot.docChanges().forEach(change => {
         // console.log("change: ", change);
@@ -113,8 +113,6 @@ class FunFood extends Component {
           // Remove the item from the current state:
           this.setState(prevState => ({
             items: prevState.items.filter(item => {
-              console.log("item: ", item);
-              console.log("item.id !== change.doc.id? ", item.id !== change.doc.id);
               return item.id !== change.doc.id;
             })
           }));
@@ -136,11 +134,6 @@ class FunFood extends Component {
   }
 
   /**
-   * Calls when the component gets removed from the DOM:
-   */
-  // componentWillUnmount() { }
-
-  /**
    * Generic function to handle changes to input boxes
    */ 
   handleChange(e) {
@@ -157,16 +150,9 @@ class FunFood extends Component {
       user: this.state.username
     }
 
-    // Add a new document with a generated id to "items" table/db.
-    firebase.firestore().collection("items").add(item)
-      .then((docRef) => {
-        console.log("Document written with ID: ", docRef.id);
-      })
-      .catch(function(error) {
-        console.error("Error adding document: ", error);
-      });
+    addItemToFirebase(item);
 
-    // clear inputs after successful submit:
+    // Clear the state inputs:
     this.setState({
       currentItem: '',
       username: ''
@@ -214,6 +200,17 @@ class FunFood extends Component {
       console.error("Error logging out: ", error);
     });
   }
+}
+
+// "Outer" function since it doesn't actually touch the state at all:
+function addItemToFirebase(item) {
+  firebase.firestore().collection("items").add(item)
+    .then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch(function(error) {
+      console.error("Error adding document: ", error);
+    });
 }
 
 export default FunFood;
