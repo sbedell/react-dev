@@ -3,11 +3,19 @@
  * 
  * https://reactjs.org/docs/handling-events.html
  * https://reactjs.org/docs/state-and-lifecycle.html
+ * 
+ * TODOS:
+ * 1. Login page
+ *  1.5. "Forgot password" button/link or something too
+ * 2. Sign-up page (link from the login page?)
+ * 3. Update user info page, can update email and password
  */
 
 import React, { Component } from 'react';
-import './fun-food-friends.css';
+import Modal from './components/modal/modal';
 import firebase from './firebase.js';
+
+import './fun-food-friends.css';
 
 class FunFood extends Component {
   constructor() {
@@ -16,6 +24,7 @@ class FunFood extends Component {
     this.state = {
       currentItem: '',
       username: '',
+      showLoginModal: false,
       user: null,
       items: []
     };
@@ -61,6 +70,12 @@ class FunFood extends Component {
                       <h3>{item.itemName}</h3>
                       <p>brought by: {item.username}</p>
                       <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                      
+                      {/* { item.user === this.state.user.displayName || item.user === this.state.user.email ?
+                        <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                        :
+                        null
+                      } */}
                     </li>
                   )
                 })}
@@ -68,6 +83,17 @@ class FunFood extends Component {
             </div>
           </section>
         </div>
+
+        <Modal show={this.state.showLoginModal} handleClose={this.hideModal}>
+          <h1>Log In</h1>
+          
+          <label for="user-email">Email:</label>
+          <input id="user-email" type="text"></input>
+
+          <label for="user-password">Password:</label>
+          <input id="user-password" type="password"></input> 
+        </Modal>
+
       </div>
     );
   }
@@ -77,8 +103,6 @@ class FunFood extends Component {
    * "The componentDidMount() method runs after the component output has been rendered to the DOM." 
    */
   componentDidMount() {
-    // console.log("componentDidMount called");
-
     // TODO - Maybe move the firebase.firestore calls into their own functions to call for adding and removing. 
     firebase.firestore().collection("items").onSnapshot(snapshot => {
       // console.log("onSnapshot: ", snapshot);
@@ -172,12 +196,20 @@ class FunFood extends Component {
   // TODO - actually link this up...
   logIn() {
     console.log("login clicked...");
+
+    // open the log-in modal:
+    this.setState({
+      showLoginModal: true
+    });
   }
 
   // Error Codes: auth/invalid-email, auth/user-disabled, auth/user-not-found, auth/wrong-password
   /*
   logIn(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(function() {
+        console.log("Successfully logged in!");
+      })
       .catch(function(error) {
         // Handle Errors here.
         // var errorCode = error.code;
@@ -200,6 +232,18 @@ class FunFood extends Component {
       console.error("Error logging out: ", error);
     });
   }
+
+  showModal = () => {
+    this.setState({
+      showLoginModal: true
+    });
+  };
+  
+  hideModal = () => {
+    this.setState({
+      showLoginModal: false
+    });
+  };
 }
 
 // "Outer" function since it doesn't actually touch the state at all:
