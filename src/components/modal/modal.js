@@ -13,8 +13,8 @@ const Modal = (props) => {
   return (
     <div className={showHideClassName}>
       <section className="modal-main">
+        <button className="close-btn" onClick={props.handleClose}>x</button>
         {props.children}
-        <button onClick={props.handleClose}>close</button>
       </section>
     </div>
   );

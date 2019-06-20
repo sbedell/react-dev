@@ -44,6 +44,14 @@ header i {
   float: right;
 }
 
+.wrapper .logout-section {
+  float: right;
+}
+
+.logout-section span {
+  margin: 15px;
+}
+
 .add-item {
   border-radius: 2px;
   border-top: 3px solid #103D5D;
@@ -126,17 +134,4 @@ button {
   font-size: 14px;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
   padding: 10px 6px;
-}
-
-.user-profile {
-  position: fixed;
-  bottom: 20px;
-  right: 40px;
-  width: 100px;
-  height: 100px;
-}
-
-.user-profile img {
-  border-radius: 50%;
-  max-width: 100%;
 }

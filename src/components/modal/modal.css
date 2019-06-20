@@ -5,16 +5,45 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
+  transition: all .6s;
 }
 
 .modal-main {
   position: fixed;
   background: white;
-  width: 80%;
+  width: 25%;
   height: auto;
   top: 50%;
   left: 50%;
+  padding: 15px 35px;
   transform: translate(-50%,-50%);
+  transition: all .6s;
+}
+
+.modal-main button {
+  background-color: white;
+  border: 0;
+  color: darkslategrey;
+  font-size: 14px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
+  padding: 10px 6px;
+  margin: 5px;
+}
+
+.login-modal {
+  width: 50%;
+}
+
+.close-btn {
+  float: right;
+  margin: 0;
+  min-width: 0px;
+  border: 0;
+}
+
+.modal-main input {
+  width: 60%;
+  border: 1px solid grey;
 }
 
 .display-block {

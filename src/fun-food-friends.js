@@ -5,10 +5,10 @@
  * https://reactjs.org/docs/state-and-lifecycle.html
  * 
  * TODOS:
- * 1. Login page
- *  1.5. "Forgot password" button/link or something too
+ * 0. Login page - basically done / working right now :D.
+ * 1. "Forgot password" button/link or something too
  * 2. Sign-up page (link from the login page?)
- * 3. Update user info page, can update email and password
+ * 3. Update user info page, can update displayName, email, and password
  */
 
 import React, { Component } from 'react';
@@ -43,55 +43,70 @@ class FunFood extends Component {
           <div className='wrapper'>
             <h1>Fun Food Friends</h1>
             {this.state.user ?
-              <button onClick={this.logOut}>Log Out</button>                
+              <span className="logout-section">
+                <span>{this.state.user.email}</span>
+                <button onClick={this.logOut}>Log Out</button>
+              </span>
               :
-              <button onClick={this.logIn}>Log In</button>              
+              <button onClick={this.showModal}>Log In</button>              
             }
           </div>
         </header>
 
-        <div className='container'>
-          <section className='add-item'>
-            <form onSubmit={this.handleSubmit}>
-              <input id="usernameInput" type="text" name="username" placeholder="What's your name?" 
-                  onChange={this.handleChange} value={this.state.username} />
-              <input id="itemInput" type="text" name="currentItem" placeholder="What are you bringing?" 
-                  onChange={this.handleChange} value={this.state.currentItem} />
-              <button>Add Item</button>
-            </form>
-          </section>
-          
-          <section className='display-item'>
-            <div className='wrapper'>
-              <ul>
-                {this.state.items.map((item) => {
-                  return (
-                    <li key={item.id}>
-                      <h3>{item.itemName}</h3>
-                      <p>brought by: {item.username}</p>
-                      <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
-                      
-                      {/* { item.user === this.state.user.displayName || item.user === this.state.user.email ?
+        {this.state.user ?
+          <div className='container'>
+            <section className='add-item'>
+              <form onSubmit={this.handleSubmit}>
+                <input id="usernameInput" type="text" name="username" placeholder="What's your name?" 
+                    onChange={this.handleChange} value={this.state.username} />
+                <input id="itemInput" type="text" name="currentItem" placeholder="What are you bringing?" 
+                    onChange={this.handleChange} value={this.state.currentItem} />
+                <button>Add Item</button>
+              </form>
+            </section>
+            
+            <section className='display-item'>
+              <div className='wrapper'>
+                <ul>
+                  {this.state.items.map((item) => {
+                    return (
+                      <li key={item.id}>
+                        <h3>{item.itemName}</h3>
+                        <p>brought by: {item.username}</p>
                         <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
-                        :
-                        null
-                      } */}
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          </section>
-        </div>
+                        
+                        {/* { item.user === this.state.user.displayName || item.user === this.state.user.email ?
+                          <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                          :
+                          null
+                        } */}
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            </section>
+          </div>
+          :
+          <div className='container'>
+            <p>Please log in to see the potluck list and submit to it.</p>
+          </div>
+        }
 
         <Modal show={this.state.showLoginModal} handleClose={this.hideModal}>
           <h1>Log In</h1>
           
-          <label for="user-email">Email:</label>
+          <label htmlFor="user-email">Email:</label>
           <input id="user-email" type="text"></input>
 
-          <label for="user-password">Password:</label>
+          <label htmlFor="user-password">Password:</label>
           <input id="user-password" type="password"></input> 
+
+          <p id="login-info"></p>
+
+          <button onClick={this.logIn}>Log In</button>
+          <button>Forgot Password</button>
+          <p>Don't have an account?</p><button>Sign Up</button>
         </Modal>
 
       </div>
@@ -103,10 +118,19 @@ class FunFood extends Component {
    * "The componentDidMount() method runs after the component output has been rendered to the DOM." 
    */
   componentDidMount() {
-    // TODO - Maybe move the firebase.firestore calls into their own functions to call for adding and removing. 
-    firebase.firestore().collection("items").onSnapshot(snapshot => {
-      // console.log("onSnapshot: ", snapshot);
+    // Check login state:
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in, set state:
+        this.setState({ user });
+        this.getItemsFromFirebase();
+      }
+    }); 
+  }
 
+  getItemsFromFirebase() {
+    // TODO - Maybe move the firebase.firestore calls into their own functions to call for adding and removing.
+    firebase.firestore().collection("items").onSnapshot(snapshot => {
       snapshot.docChanges().forEach(change => {
         // console.log("change: ", change);
 
@@ -145,16 +169,6 @@ class FunFood extends Component {
     }, err => {
       console.error("Encountered error: ", err);
     });
-
-    // Check login state:
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in, set state:
-        this.setState({ user });
-      } else {
-        // No user is signed in.
-      }
-    });  
   }
 
   /**
@@ -193,32 +207,25 @@ class FunFood extends Component {
       });;
   }
 
-  // TODO - actually link this up...
+  /**
+   * Handle Log in button action
+   */
   logIn() {
-    console.log("login clicked...");
+    let email = document.getElementById("user-email").value;
+    let password = document.getElementById("user-password").value;
 
-    // open the log-in modal:
-    this.setState({
-      showLoginModal: true
-    });
-  }
-
-  // Error Codes: auth/invalid-email, auth/user-disabled, auth/user-not-found, auth/wrong-password
-  /*
-  logIn(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(function() {
+      .then(() => {
         console.log("Successfully logged in!");
+        this.hideModal();
       })
-      .catch(function(error) {
-        // Handle Errors here.
-        // var errorCode = error.code;
-        // var errorMessage = error.message;
+      .catch((error) => {
+        // Error Codes: auth/invalid-email, auth/user-disabled, auth/user-not-found, auth/wrong-password
+        // let errorCode = error.code;
+        // let errorMessage = error.message;
         console.error("Error logging in: ", error);
-        // ...
       });
   }
-  */ 
 
   // This should be good to go but not totally linked up yet either
   logOut() {
@@ -228,7 +235,6 @@ class FunFood extends Component {
         user: null
       });
     }).catch((error) => {
-      // An error happened.
       console.error("Error logging out: ", error);
     });
   }
