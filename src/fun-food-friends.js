@@ -4,14 +4,17 @@
  * https://reactjs.org/docs/handling-events.html
  * https://reactjs.org/docs/state-and-lifecycle.html
  * 
- * TODOS:
+ * TODOs:
  * 0. Login page - basically done / working right now :D.
- * 1. "Forgot password" button/link or something too
+ *    -  Need to reset form on login, could/should probably just make it it's own page
+ * 1. "Forgot password" button/link (new page or modal)
  * 2. Sign-up page (link from the login page?)
  * 3. Update user info page, can update displayName, email, and password
  */
 
 import React, { Component } from 'react';
+// import { Link } from "react-router-dom";
+
 import Modal from './components/modal/modal';
 import firebase from './firebase.js';
 
@@ -26,7 +29,8 @@ class FunFood extends Component {
       username: '',
       showLoginModal: false,
       user: null,
-      items: []
+      items: [],
+      loginErrorMessage: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -39,27 +43,26 @@ class FunFood extends Component {
     // console.log("Render called");
     return (
       <div className='app'>
-        <header>
-          <div className='wrapper'>
-            <h1>Fun Food Friends</h1>
-            {this.state.user ?
-              <span className="logout-section">
-                <span>{this.state.user.email}</span>
-                <button onClick={this.logOut}>Log Out</button>
-              </span>
-              :
-              <button onClick={this.showModal}>Log In</button>              
-            }
-          </div>
+        <header className="my-header">
+          <h1>Fun Food Friends</h1>
+          {this.state.user ?
+            <span className="logout-section">
+              <span>{this.state.user.email}</span>
+              <button onClick={this.logOut}>Log Out</button>
+            </span>
+            :
+            <button onClick={this.showModal}>Log In</button>
+            // <Link to="/login">Log In</Link>
+          }
         </header>
 
         {this.state.user ?
           <div className='container'>
             <section className='add-item'>
               <form onSubmit={this.handleSubmit}>
-                <input id="usernameInput" type="text" name="username" placeholder="What's your name?" 
+                <input type="text" className="user-input" name="username" placeholder="What's your name?" 
                     onChange={this.handleChange} value={this.state.username} />
-                <input id="itemInput" type="text" name="currentItem" placeholder="What are you bringing?" 
+                <input type="text" className="user-input" name="currentItem" placeholder="What are you bringing?" 
                     onChange={this.handleChange} value={this.state.currentItem} />
                 <button>Add Item</button>
               </form>
@@ -72,8 +75,8 @@ class FunFood extends Component {
                     return (
                       <li key={item.id}>
                         <h3>{item.itemName}</h3>
-                        <p>brought by: {item.username}</p>
-                        <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                        <p>Brought by: {item.username}</p>
+                        <button className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
                         
                         {/* { item.user === this.state.user.displayName || item.user === this.state.user.email ?
                           <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
@@ -81,7 +84,7 @@ class FunFood extends Component {
                           null
                         } */}
                       </li>
-                    )
+                    );
                   })}
                 </ul>
               </div>
@@ -97,12 +100,12 @@ class FunFood extends Component {
           <h1>Log In</h1>
           
           <label htmlFor="user-email">Email:</label>
-          <input id="user-email" type="text"></input>
+          <input id="user-email" type="email"></input>
 
           <label htmlFor="user-password">Password:</label>
           <input id="user-password" type="password"></input> 
 
-          <p id="login-info"></p>
+          <p>{this.state.loginErrorMessage}</p>
 
           <button onClick={this.logIn}>Log In</button>
           <button>Forgot Password</button>
@@ -122,6 +125,7 @@ class FunFood extends Component {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // User is signed in, set state:
+        console.log("onAuthStateChanged, user exists, setting user in state");
         this.setState({ user });
         this.getItemsFromFirebase();
       }
@@ -135,7 +139,7 @@ class FunFood extends Component {
         // console.log("change: ", change);
 
         if (change.type === "added") {
-          console.log("Added: ", change.doc.data());
+          // console.log("Added: ", change.doc.data());
 
           let item = {
             id: change.doc.id,
@@ -218,21 +222,36 @@ class FunFood extends Component {
       .then(() => {
         console.log("Successfully logged in!");
         this.hideModal();
+
+        // reset form values?
+        document.getElementById("user-email").value = "";
+        document.getElementById("user-password").value = "";
+
+        // Populate items?
+        // this.getItemsFromFirebase();
       })
       .catch((error) => {
         // Error Codes: auth/invalid-email, auth/user-disabled, auth/user-not-found, auth/wrong-password
         // let errorCode = error.code;
         // let errorMessage = error.message;
         console.error("Error logging in: ", error);
+        this.setState({
+          loginErrorMessage: error.message
+        });
       });
   }
 
   // This should be good to go but not totally linked up yet either
   logOut() {
     firebase.auth().signOut().then(() => {
-      // Sign-out successful. Set user state back to null: 
+      // Sign-out successful. Reset the entire state:
       this.setState({
-        user: null
+        currentItem: '',
+        username: '',
+        showLoginModal: false,
+        user: null,
+        items: [],
+        loginErrorMessage: ''
       });
     }).catch((error) => {
       console.error("Error logging out: ", error);
