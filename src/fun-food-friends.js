@@ -64,17 +64,17 @@ class FunFood extends Component {
                     onChange={this.handleChange} value={this.state.username} />
                 <input type="text" className="user-input" name="currentItem" placeholder="What are you bringing?" 
                     onChange={this.handleChange} value={this.state.currentItem} />
-                <button>Add Item</button>
+                <button className="form-button">Add Item</button>
               </form>
             </section>
             
             <section className='display-item'>
               <div className='wrapper'>
-                <ul>
+                <ul className="item-list">
                   {this.state.items.map((item) => {
                     return (
-                      <li key={item.id}>
-                        <h3>{item.itemName}</h3>
+                      <li className="food-item" key={item.id}>
+                        <h3 className="item-header">{item.itemName}</h3>
                         <p>Brought by: {item.username}</p>
                         <button className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
                         
