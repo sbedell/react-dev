@@ -45,6 +45,11 @@ body {
   margin: 15px;
 }
 
+.logout-section a {
+  margin: 15px;
+  color: white;
+}
+
 .add-item {
   border-radius: 2px;
   border-top: 3px solid #103D5D;
@@ -107,6 +112,10 @@ body {
 
 .food-item p {
   padding: 15px;
+}
+
+.error {
+  color: red;
 }
 
 .action-button,

@@ -13,7 +13,7 @@
  */
 
 import React, { Component } from 'react';
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Modal from './components/modal/modal';
 import firebase from './firebase.js';
@@ -47,7 +47,7 @@ class FunFood extends Component {
           <h1>Fun Food Friends</h1>
           {this.state.user ?
             <span className="logout-section">
-              <span>{this.state.user.email}</span>
+              <Link to="/update-account">{this.state.user.email}</Link>
               <button onClick={this.logOut}>Log Out</button>
             </span>
             :
@@ -105,7 +105,7 @@ class FunFood extends Component {
           <label htmlFor="user-password">Password:</label>
           <input id="user-password" type="password"></input> 
 
-          <p>{this.state.loginErrorMessage}</p>
+          <p className="error">{this.state.loginErrorMessage}</p>
 
           <button onClick={this.logIn}>Log In</button>
           <button>Forgot Password</button>
@@ -122,11 +122,15 @@ class FunFood extends Component {
    */
   componentDidMount() {
     // Check login state:
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // User is signed in, set state:
         console.log("onAuthStateChanged, user exists, setting user in state");
-        this.setState({ user });
+        // console.log(user);
+
+        this.setState({ 
+          user: user 
+        });
         this.getItemsFromFirebase();
       }
     }); 
@@ -226,9 +230,6 @@ class FunFood extends Component {
         // reset form values?
         document.getElementById("user-email").value = "";
         document.getElementById("user-password").value = "";
-
-        // Populate items?
-        // this.getItemsFromFirebase();
       })
       .catch((error) => {
         // Error Codes: auth/invalid-email, auth/user-disabled, auth/user-not-found, auth/wrong-password
