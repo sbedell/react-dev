@@ -1,14 +1,16 @@
 import React from 'react';
-import firebase from '../firebase.js';
+import firebase from '../../firebase.js';
+
+// import "./login.css";
 
 class Login extends React.Component {
   render() {
     return (
-      <div>
+      <div className="login-page">
         <h1>Log In</h1>
             
         <label htmlFor="user-email">Email:</label>
-        <input id="user-email" type="text"></input>
+        <input id="user-email" type="email"></input>
 
         <label htmlFor="user-password">Password:</label>
         <input id="user-password" type="password"></input> 
@@ -17,7 +19,8 @@ class Login extends React.Component {
 
         <button onClick={this.logIn}>Log In</button>
         <button>Forgot Password</button>
-        <p>Don't have an account?</p><button>Sign Up</button>
+        <p>Don't have an account?</p>
+        <button>Sign Up</button>
       </div>
     ); 
   }
