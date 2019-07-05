@@ -27,7 +27,7 @@
   font-size: 14px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
   padding: 10px 6px;
-  margin: 5px;
+  margin: 5px 0;
 }
 
 .modal-main input {
@@ -37,8 +37,10 @@
   margin: 10px 0;
 }
 
-.login-modal {
-  width: 50%;
+.login-btn {
+  background-color: cornflowerblue;
+  color: white;
+  width: 100%;
 }
 
 .close-btn {
