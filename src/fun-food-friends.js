@@ -47,7 +47,7 @@ class FunFood extends Component {
           <h1>Fun Food Friends</h1>
           {this.state.user ?
             <span className="logout-section">
-              <Link to="/update-account">{this.state.user.email}</Link>
+              <Link to="/account-settings">{this.state.user.email}</Link>
               <button onClick={this.logOut}>Log Out</button>
             </span>
             :
@@ -107,9 +107,10 @@ class FunFood extends Component {
 
           <p className="error">{this.state.loginErrorMessage}</p>
 
-          <button onClick={this.logIn}>Log In</button>
+          <button className="login-btn" onClick={this.logIn}>Log In</button>
+          <br></br>
           <button>Forgot Password</button>
-          <p>Don't have an account?</p><button>Sign Up</button>
+          <p>Don't have an account?</p><Link to="/sign-up" className="modal-link-btn">Sign Up</Link>
         </Modal>
 
       </div>
@@ -208,9 +209,9 @@ class FunFood extends Component {
   removeItem(itemId) {
     firebase.firestore().collection("items").doc(itemId)
       .delete()
-      .then(function() {
+      .then(() => {
         console.log("Item successfully deleted!");
-      }).catch(function(error) {
+      }).catch(error => {
         console.error("Error removing document: ", error);
       });;
   }
@@ -231,7 +232,7 @@ class FunFood extends Component {
         document.getElementById("user-email").value = "";
         document.getElementById("user-password").value = "";
       })
-      .catch((error) => {
+      .catch(error => {
         // Error Codes: auth/invalid-email, auth/user-disabled, auth/user-not-found, auth/wrong-password
         // let errorCode = error.code;
         // let errorMessage = error.message;
@@ -254,7 +255,7 @@ class FunFood extends Component {
         items: [],
         loginErrorMessage: ''
       });
-    }).catch((error) => {
+    }).catch(error => {
       console.error("Error logging out: ", error);
     });
   }
@@ -275,10 +276,10 @@ class FunFood extends Component {
 // "Outer" function since it doesn't actually touch the state at all:
 function addItemToFirebase(item) {
   firebase.firestore().collection("items").add(item)
-    .then((docRef) => {
+    .then(docRef => {
       console.log("Document written with ID: ", docRef.id);
     })
-    .catch(function(error) {
+    .catch(error => {
       console.error("Error adding document: ", error);
     });
 }

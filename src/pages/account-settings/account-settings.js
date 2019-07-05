@@ -1,14 +1,19 @@
 /**
  * Component (page) to handle profile / account updates.
  * https://firebase.google.com/docs/auth/web/manage-users
+ * 
+ * TODO:
+ * Show a label with the value, 
+ * then make an "edit" button that turns the value into an input box to let them edit,
+ * and then follow off that "edit mode" with a save button and a cancel button. 
  */
 
 import React from 'react';
 import firebase from '../../firebase.js';
 
-import "./update-account.css";
+import "./account-settings.css";
 
-class UpdateAccount extends React.Component {
+class AccountSettings extends React.Component {
   constructor() {
     super();
 
@@ -19,25 +24,39 @@ class UpdateAccount extends React.Component {
 
   render() {
     return (
-      <div className="update-account-page">
+      <div className="account-settings-page">
         <h1>Profile / Account Info</h1>
 
         {/* TODO - Stuff to display: DisplayName, Email, Email Verified (y/n) */}
             
         {/* <label htmlFor="user-email">Email</label>
         <input id="user-email" type="email"></input> */}
-        <label>Email: </label>
-        {this.state.currentUser ? 
-          <span>{this.state.currentUser.email}</span>
-          :
-          <p>-</p>
-        }
-        
-        <br></br>
-        <label htmlFor="user-password">Password</label>
-        <input id="user-password" type="password"></input> 
+        <div className="profile-info-section">
+          <label>Email: </label>
+          {this.state.currentUser ? 
+            <span>{this.state.currentUser.email}</span>
+            :
+            <span>-</span>
+          }
+          <button>Edit Email</button>
+        </div>
 
-        <button>Update User Info</button>
+        <div className="profile-info-section">
+          <label>Username: </label>
+          {/* Find some way here to do a nested if statement or "renderContent" or somthing to 
+          display a message to the user if the username/display name is not set. */}
+          {this.state.currentUser ? 
+            <span>{this.state.currentUser.displayName}</span>
+            :
+            <span>-</span>
+          }
+          <button>Edit Username</button>
+        </div>
+        
+        <div className="profile-info-section">
+          <label htmlFor="user-password">Password</label>
+          <input id="user-password" type="password"></input>
+        </div>
       </div>
     );
   }
@@ -138,4 +157,4 @@ class UpdateAccount extends React.Component {
   }
 }
 
-export default UpdateAccount;
+export default AccountSettings;

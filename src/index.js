@@ -6,7 +6,8 @@ import './index.css';
 
 import FunFood from './fun-food-friends';
 import Login from './pages/login/login.js';
-import UpdateAccount from "./pages/update-account/update-account.js"
+import AccountSettings from "./pages/account-settings/account-settings.js"
+import SignUpPage from "./pages/sign-up/sign-up.js";
 import * as serviceWorker from './serviceWorker';
 
 // Reference - https://codeburst.io/getting-started-with-react-router-5c978f70df91
@@ -14,7 +15,8 @@ const routing = (
   <Router>
     <Route exact path="/" component={FunFood} />
     <Route path="/login" component={Login} />
-    <Route path="/update-account" component={UpdateAccount} />
+    <Route path="/account-settings" component={AccountSettings} />
+    <Route path="/sign-up" component={SignUpPage} />
   </Router>
 );
 
