@@ -25,16 +25,13 @@ class FunFood extends Component {
     super();
 
     this.state = {
-      currentItem: '',
-      username: '',
       showLoginModal: false,
       user: null,
       items: [],
       loginErrorMessage: ''
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAddItemButtonClick = this.handleAddItemButtonClick.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
   }
@@ -59,30 +56,35 @@ class FunFood extends Component {
         {this.state.user ?
           <div className='container'>
             <section className='add-item'>
-              <form onSubmit={this.handleSubmit}>
-                <input type="text" className="user-input" name="username" placeholder="What's your name?" 
-                    onChange={this.handleChange} value={this.state.username} />
-                <input type="text" className="user-input" name="currentItem" placeholder="What are you bringing?" 
-                    onChange={this.handleChange} value={this.state.currentItem} />
-                <button className="form-button">Add Item</button>
-              </form>
+              <input id="input-current-item" type="text" className="user-input" name="currentItem" placeholder="What are you bringing?" />
+              
+              {this.state.user.displayName ? 
+                <p>User: {this.state.user.displayName}</p>
+                :
+                <p>User: {this.state.user.email}</p>
+              }
+              
+              <button type="button" className="form-button" onClick={this.handleAddItemButtonClick}>Add Item</button>
             </section>
             
             <section className='display-item'>
               <div className='wrapper'>
                 <ul className="item-list">
-                  {this.state.items.map((item) => {
+                  {this.state.items.map(item => {
                     return (
                       <li className="food-item" key={item.id}>
                         <h3 className="item-header">{item.itemName}</h3>
-                        <p>Brought by: {item.username}</p>
-                        <button className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
-                        
-                        {/* { item.user === this.state.user.displayName || item.user === this.state.user.email ?
-                          <button onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                        { item.userName ? 
+                          <p>Brought by: {item.userName}</p>
+                          :
+                          <p>Brought by: {item.userEmail}</p>
+                        }
+                                                
+                        { item.userName === this.state.user.displayName || item.userEmail === this.state.user.email ?
+                          <button type="button" className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
                           :
                           null
-                        } */}
+                        }
                       </li>
                     );
                   })}
@@ -149,7 +151,8 @@ class FunFood extends Component {
           let item = {
             id: change.doc.id,
             itemName: change.doc.data().itemName,
-            username: change.doc.data().user
+            userName: change.doc.data().userName,
+            userEmail: change.doc.data().userEmail
           };
 
           // Add the new item to the state:
@@ -180,30 +183,27 @@ class FunFood extends Component {
     });
   }
 
-  /**
-   * Generic function to handle changes to input boxes
-   */ 
-  handleChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  }
+  // TODO - Switch from the handleChange and handleSubmit functions to this one that pulls via ID:
+  handleAddItemButtonClick() {
+    let inputItemName = document.getElementById("input-current-item").value.trim();
+    let item = {};
 
-  handleSubmit(e) {
-    e.preventDefault();
+    if (inputItemName) {
+      // Eventually you're probably just going to want to link this up to the user as a "foreign key"
+      // then pull the email and user/displayName from that ..."link"
+      item = {
+        itemName: inputItemName,
+        userName: this.state.user.displayName,
+        userEmail: this.state.user.email
+      };
 
-    const item = {
-      itemName: this.state.currentItem,
-      user: this.state.username
+      addItemToFirebase(item);
+
+      // reset the input
+      document.getElementById("input-current-item").value = "";
+    } else {
+      alert("Error: item cannot be blank!");
     }
-
-    addItemToFirebase(item);
-
-    // Clear the state inputs:
-    this.setState({
-      currentItem: '',
-      username: ''
-    });
   }
 
   removeItem(itemId) {
@@ -243,13 +243,10 @@ class FunFood extends Component {
       });
   }
 
-  // This should be good to go but not totally linked up yet either
   logOut() {
     firebase.auth().signOut().then(() => {
       // Sign-out successful. Reset the entire state:
       this.setState({
-        currentItem: '',
-        username: '',
         showLoginModal: false,
         user: null,
         items: [],
