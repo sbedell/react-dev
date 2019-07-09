@@ -18,7 +18,7 @@ class AccountSettings extends React.Component {
     super();
 
     this.state = {
-      currentUser: null,
+      currentUser: firebase.auth().currentUser,
       editEmail: false,
       editUsername: false
     };
@@ -80,6 +80,16 @@ class AccountSettings extends React.Component {
             <button id="edit-username-btn" type="button" onClick={this.openEditMode}>Edit Username</button>
           }
         </div>
+
+        <div className="profile-info-section">
+          <label>Email Verified: </label>
+          { this.state.currentUser.emailVerified ?
+            <span>Yes</span>
+            :
+            <span>No</span>
+          }
+          <button type="button">Send Verification Email</button>
+        </div>
         
         <div className="profile-info-section">
           <label>Set New Password</label>
@@ -94,16 +104,6 @@ class AccountSettings extends React.Component {
         </div> */}
       </div>
     );
-  }
-
-  componentDidMount() {
-    let user = firebase.auth().currentUser;
-
-    if (user) {
-      this.setState({
-        currentUser: user
-      });
-    }
   }
 
   openEditMode(e) {
