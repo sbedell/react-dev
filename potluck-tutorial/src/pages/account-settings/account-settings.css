@@ -1,0 +1,48 @@
+.account-settings-page {
+  margin: 15px auto;
+  padding: 15px;
+}
+
+.account-settings-page h1 {
+  text-align: center;
+}
+
+.profile-info-section {
+  margin: 20px 0;
+}
+
+.profile-info-section label {
+  margin: 25px;
+}
+
+.profile-info-section button {
+  margin-left: 35px;
+}
+
+.profile-info-section input {
+  margin: 10px;
+}
+
+.profile-info-section-OLD {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-info-section button {
+  border-radius: 2px;
+  background-color: #009CFA;
+  cursor: pointer;
+  border: 0;
+  min-width: 120px;
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+  padding: 10px 6px;
+}
+
+@media (min-width: 900px) {
+  .account-settings-page {
+    width: 33%;
+  }
+}

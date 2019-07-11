@@ -9,7 +9,7 @@
  *    -  Need to reset form on login, could/should probably just make it it's own page
  * 1. "Forgot password" button/link (new page or modal)
  * 2. Sign-up page (link from the login page?)
- * 3. Update user info page, can update displayName, email, and password
+ * 3. Account Info page - keep working on it, finish styling it, etc
  */
 
 import React, { Component } from 'react';
@@ -131,9 +131,7 @@ class FunFood extends Component {
         console.log("onAuthStateChanged, user exists, setting user in state");
         // console.log(user);
 
-        this.setState({ 
-          user: user 
-        });
+        this.setState({ user: user });
         this.getItemsFromFirebase();
       }
     }); 
@@ -186,12 +184,10 @@ class FunFood extends Component {
   // TODO - Switch from the handleChange and handleSubmit functions to this one that pulls via ID:
   handleAddItemButtonClick() {
     let inputItemName = document.getElementById("input-current-item").value.trim();
-    let item = {};
-
     if (inputItemName) {
       // Eventually you're probably just going to want to link this up to the user as a "foreign key"
       // then pull the email and user/displayName from that ..."link"
-      item = {
+      let item = {
         itemName: inputItemName,
         userName: this.state.user.displayName,
         userEmail: this.state.user.email
@@ -202,7 +198,7 @@ class FunFood extends Component {
       // reset the input
       document.getElementById("input-current-item").value = "";
     } else {
-      alert("Error: item cannot be blank!");
+      alert("Item cannot be blank!");
     }
   }
 
