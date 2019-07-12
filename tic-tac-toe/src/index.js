@@ -2,27 +2,35 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+// Called a "controlled component", as Board has full control over Square.
+// This is also now a "Function Component"
+function Square(props) {
+  return (
+    <button className="square" onClick={props.onClick} >
+      { props.value }
+    </button>
+  );
+}
+
+class Board extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      squareValue: null
-    };
+      squares: Array(9).fill(null),
+    }
   }
 
-  render() {
-    return (
-      <button className="square" onClick={() => { this.setState({ squareValue: "X" }); }}>
-        { this.state.squareValue }
-      </button>
-    );
+  handleClick(i) {
+    let newSquares = this.state.squares.slice();
+    newSquares[i] = "X";
+    this.setState({squares: newSquares});
   }
-}
 
-class Board extends React.Component {
   renderSquare(i) {
-    return <Square value={i} />;
+    return (
+      <Square value={this.state.squares[i]} onClick={() => this.handleClick(i) } />
+    );
   }
 
   render() {
