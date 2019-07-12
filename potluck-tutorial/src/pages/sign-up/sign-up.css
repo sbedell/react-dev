@@ -1,0 +1,21 @@
+.sign-up-page {
+  margin: 15px auto;
+  padding: 15px;
+}
+
+.sign-up-page h1,
+.sign-up-page h2 {
+  text-align: center;
+}
+
+.user-input-section {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+@media (min-width: 900px) {
+  .sign-up-page {
+    width: 33%;
+  }
+}
