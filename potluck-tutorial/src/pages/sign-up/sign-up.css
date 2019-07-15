@@ -14,7 +14,39 @@
   margin: 15px 0;
 }
 
-@media (min-width: 900px) {
+.main-btn {
+  border-radius: 2px;
+  background-color: #009CFA;
+  cursor: pointer;
+  border: 0;
+  min-width: 120px;
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
+  padding: 10px 6px;
+}
+
+.main-btn:hover {
+  background-color: rgb(1, 123, 199);
+  box-shadow: 2px 2px 5px 3px lightgrey;
+}
+
+.main-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.error-msg {
+  color: red;
+}
+
+@media (min-width: 600px) {
+  .sign-up-page {
+    width: 60%;
+  }
+}
+
+@media (min-width: 1100px) {
   .sign-up-page {
     width: 33%;
   }
