@@ -125,3 +125,7 @@ body {
   box-shadow: 0 2px 5px 0 rgba(0,0,0,.26);
   padding: 10px 6px;
 }
+
+.app button:hover {
+  background-color: rgb(253, 131, 44);
+}

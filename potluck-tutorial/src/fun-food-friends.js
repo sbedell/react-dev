@@ -25,13 +25,16 @@ class FunFood extends Component {
     super();
 
     this.state = {
+      currentItem: '',
       showLoginModal: false,
       user: null,
       items: [],
       loginErrorMessage: ''
     };
 
-    this.handleAddItemButtonClick = this.handleAddItemButtonClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
   }
@@ -56,15 +59,19 @@ class FunFood extends Component {
         {this.state.user ?
           <div className='container'>
             <section className='add-item'>
-              <input id="input-current-item" type="text" className="user-input" name="currentItem" placeholder="What are you bringing?" />
-              
-              {this.state.user.displayName ? 
-                <p>User: {this.state.user.displayName}</p>
-                :
-                <p>User: {this.state.user.email}</p>
-              }
-              
-              <button type="button" className="form-button" onClick={this.handleAddItemButtonClick}>Add Item</button>
+              <form onSubmit={this.handleSubmit}>
+                <input type="text" className="user-input" 
+                  name="currentItem" placeholder="What are you bringing?" 
+                  onChange={this.handleChange} value={this.state.currentItem} />
+                
+                {this.state.user.displayName ? 
+                  <p>User: {this.state.user.displayName}</p>
+                  :
+                  <p>User: {this.state.user.email}</p>
+                }
+                
+                <button className="form-button">Add Item</button>
+              </form>
             </section>
             
             <section className='display-item'>
@@ -181,24 +188,31 @@ class FunFood extends Component {
     });
   }
 
-  // TODO - Switch from the handleChange and handleSubmit functions to this one that pulls via ID:
-  handleAddItemButtonClick() {
-    let inputItemName = document.getElementById("input-current-item").value.trim();
-    if (inputItemName) {
-      // Eventually you're probably just going to want to link this up to the user as a "foreign key"
-      // then pull the email and user/displayName from that ..."link"
-      let item = {
-        itemName: inputItemName,
+  /**
+   * Generic function to handle changes to input boxes
+   */ 
+  handleChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    if (this.state.currentItem) {
+      const item = {
+        itemName: this.state.currentItem.trim(),
         userName: this.state.user.displayName,
         userEmail: this.state.user.email
       };
-
+  
       addItemToFirebase(item);
-
-      // reset the input
-      document.getElementById("input-current-item").value = "";
+  
+      // Clear the state input:
+      this.setState({ currentItem: '' });
     } else {
-      alert("Item cannot be blank!");
+      alert("Please enter an item to bring!");
     }
   }
 
@@ -209,7 +223,7 @@ class FunFood extends Component {
         console.log("Item successfully deleted!");
       }).catch(error => {
         console.error("Error removing document: ", error);
-      });;
+      });
   }
 
   /**
@@ -233,9 +247,7 @@ class FunFood extends Component {
         // let errorCode = error.code;
         // let errorMessage = error.message;
         console.error("Error logging in: ", error);
-        this.setState({
-          loginErrorMessage: error.message
-        });
+        this.setState({ loginErrorMessage: error.message });
       });
   }
 
@@ -243,6 +255,7 @@ class FunFood extends Component {
     firebase.auth().signOut().then(() => {
       // Sign-out successful. Reset the entire state:
       this.setState({
+        currentItem: '',
         showLoginModal: false,
         user: null,
         items: [],
@@ -257,13 +270,13 @@ class FunFood extends Component {
     this.setState({
       showLoginModal: true
     });
-  };
+  }
   
   hideModal = () => {
     this.setState({
       showLoginModal: false
     });
-  };
+  }
 }
 
 // "Outer" function since it doesn't actually touch the state at all:
