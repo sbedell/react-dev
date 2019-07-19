@@ -1,3 +1,18 @@
+/**
+ * Tutorial from https://reactjs.org/tutorial/tutorial.html
+ * 
+ * Some TODOs from that page:
+ * If you have extra time or want to practice your new React skills, here are some 
+ * ideas for improvements that you could make to the tic-tac-toe game,
+ * which are listed in order of increasing difficulty:
+ *  1. Display the location for each move in the format (col, row) in the move history list.
+ *  2. Bold the currently selected item in the move list.
+ *  3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
+ *  4. Add a toggle button that lets you sort the moves in either ascending or descending order.
+ *  5. When someone wins, highlight the three squares that caused the win.
+ *  6. When no one wins, display a message about the result being a draw.
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -5,8 +20,13 @@ import './index.css';
 // Called a "controlled component", as Board has full control over Square.
 // This is also now a "Function Component"
 function Square(props) {
+  let squareClassName = "square";
+  if (props.value) {
+    squareClassName += ` ${props.value}`;
+  }
+
   return (
-    <button className="square" onClick={props.onClick} >
+    <button className={squareClassName} onClick={props.onClick} >
       { props.value }
     </button>
   );
@@ -50,13 +70,14 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null),
       }],
+      stepNumber: 0,
       xIsNext: true
     };
   }
 
   render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
+    const current = history[this.state.stepNumber];
     
     const moves = history.map((step, move) => {
       const desc = move ? 'Go to move #' + move : 'Go to game start';
@@ -91,7 +112,7 @@ class Game extends React.Component {
   }
 
   handleClick(i) {
-    const history = this.state.history;
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     let newSquares = current.squares.slice();
 
@@ -105,10 +126,17 @@ class Game extends React.Component {
       history: history.concat([{
         squares: newSquares,
       }]),
+      stepNumber: history.length,
       xIsNext: !this.state.xIsNext
     });
   }
-  
+
+  jumpTo(step) {
+    this.setState({
+      stepNumber: step,
+      xIsNext: (step % 2) === 0,
+    });
+  }
 }
 
 // ========================================
@@ -119,6 +147,7 @@ ReactDOM.render(
 );
 
 function calculateWinner(squares) {
+  // console.log("calculateWinner. squares: ", squares);
   const lines = [
     [0, 1, 2],
     [3, 4, 5],
