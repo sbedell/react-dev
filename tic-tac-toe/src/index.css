@@ -40,6 +40,10 @@ ol, ul {
   color: blue;
 }
 
+.current-move {
+  font-weight: bold;
+}
+
 .winner-square {
   background-color: lightcoral;
 }
