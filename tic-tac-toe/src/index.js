@@ -9,7 +9,7 @@
  *  DONE - 2. Bold the currently selected item in the move list.
  *  3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
  *  4. Add a toggle button that lets you sort the moves in either ascending or descending order.
- *  5. When someone wins, highlight the three squares that caused the win.
+ *  DONE - When someone wins, highlight the three squares that caused the win.
  *  DONE - 6. When no one wins, display a message about the result being a draw.
  */
 
@@ -23,6 +23,10 @@ function Square(props) {
   let squareClassName = "square";
   if (props.value) {
     squareClassName += ` ${props.value}`;
+  }
+
+  if (props.isWinningSquare) {
+    squareClassName += " winning-square";
   }
 
   return (
@@ -56,8 +60,21 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
+    // console.log("i: ", );
+    // console.log("this.props.winningSquares: ", this.props.winningSquares);
+    if (this.props.winningSquares) {
+      for (let x = 0; x < this.props.winningSquares.length; x++) {
+        if (this.props.winningSquares[x] === i) {
+          // console.log("MATCH");
+          return (
+            <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} isWinningSquare={true} />
+          )
+        }
+      }
+    }
+    
     return (
-      <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i) } />
+      <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />
     );
   }
 }
@@ -81,6 +98,7 @@ class Game extends React.Component {
     
     const moves = history.map((step, move) => {
       const desc = move ? 'Go to move #' + move : 'Go to game start';
+
       let btnClassName = "move-btn";
       if (this.state.stepNumber === move) {
         btnClassName = "current-move";
@@ -94,9 +112,12 @@ class Game extends React.Component {
     });
 
     let status;
+    let winningSquares;
     const winner = calculateWinner(current.squares);
+    
     if (winner) {
       status = 'Winner: ' + winner.winningPlayer;
+      winningSquares = winner.winningSquares;
     } else if (current.squares.every(val => val !== null)) {
       // Checks if every square is not null, indicating a full game board
       status = "Tie! Cats game.";
@@ -107,7 +128,7 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
-          <Board squares={current.squares} onClick={(i) => this.handleClick(i)} />
+          <Board squares={current.squares} onClick={(i) => this.handleClick(i)} winningSquares={winningSquares} />
         </div>
         <div className="game-info">
           <div>{status}</div>
@@ -153,8 +174,7 @@ ReactDOM.render(
 );
 
 function calculateWinner(squares) {
-  // console.log("calculateWinner. squares: ", squares);
-  const lines = [
+  const winningLines = [
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -165,13 +185,12 @@ function calculateWinner(squares) {
     [2, 4, 6],
   ];
 
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
+  for (let i = 0; i < winningLines.length; i++) {
+    const [a, b, c] = winningLines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      // console.log("winning squares: ", lines[i]);
       return {
-        winningPlayer: lines[a],
-        winningSquares: squares 
+        winningPlayer: squares[a],
+        winningSquares: winningLines[i] 
       }
     }
   }
