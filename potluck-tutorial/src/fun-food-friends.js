@@ -6,10 +6,9 @@
  * 
  * TODOs:
  * 0. Login page - basically done / working right now :D.
- *    -  Need to reset form on login, could/should probably just make it it's own page
- * 1. "Forgot password" button/link (new page or modal)
- * 2. Sign-up page (link from the login page?)
- * 3. Account Info page - keep working on it, finish styling it, etc
+ * 1. Sign-up page (link from the login page?) - basically done, I think? 
+ * 2. Account Info page - keep working on it, finish styling it, etc
+ * 3. "Forgot password" button/link (new page or modal) - haven't even started this yet...
  */
 
 import React, { Component } from 'react';
@@ -87,7 +86,7 @@ class FunFood extends Component {
                           <p>Brought by: {item.userEmail}</p>
                         }
                                                 
-                        { item.userName === this.state.user.displayName || item.userEmail === this.state.user.email ?
+                        { item.userEmail === this.state.user.email ?
                           <button type="button" className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
                           :
                           null

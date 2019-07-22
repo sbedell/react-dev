@@ -8,12 +8,15 @@
 }
 
 .profile-info-section {
-  margin: 20px 0;
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.profile-info-section label {
+/* .profile-info-section label {
   margin: 25px;
-}
+} */
 
 .profile-info-section button {
   margin-left: 35px;
@@ -21,12 +24,6 @@
 
 .profile-info-section input {
   margin: 10px;
-}
-
-.profile-info-section-OLD {
-  margin: 15px 0;
-  display: flex;
-  justify-content: space-between;
 }
 
 .profile-info-section button {
