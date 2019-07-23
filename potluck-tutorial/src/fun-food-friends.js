@@ -6,9 +6,10 @@
  * 
  * TODOs:
  * 0. Login page - basically done / working right now :D.
- * 1. Sign-up page (link from the login page?) - basically done, I think? 
- * 2. Account Info page - keep working on it, finish styling it, etc
- * 3. "Forgot password" button/link (new page or modal) - haven't even started this yet...
+ * 1. Account Info page - keep working on it, finish styling it, etc
+ * 2. Forgot Password button/link (new page or modal)
+ * 
+ * * DONE-  Sign-up page - Linked from the login modal.
  */
 
 import React, { Component } from 'react';
@@ -110,15 +111,18 @@ class FunFood extends Component {
           <label htmlFor="user-email">Email:</label>
           <input id="user-email" type="email"></input>
 
-          <label htmlFor="user-password">Password:</label>
+          <label htmlFor="user-password">
+            <span>Password:   </span>
+            <Link to="/forgot-password">Forgot Password</Link>
+          </label>
           <input id="user-password" type="password"></input> 
 
           <p className="error">{this.state.loginErrorMessage}</p>
 
           <button className="login-btn" onClick={this.logIn}>Log In</button>
           <br></br>
-          <button>Forgot Password</button>
-          <p>Don't have an account?</p><Link to="/sign-up" className="modal-link-btn">Sign Up</Link>
+          
+          <span>Don't have an account?  </span><Link to="/sign-up" className="modal-link-btn">Sign Up</Link>
         </Modal>
 
       </div>
