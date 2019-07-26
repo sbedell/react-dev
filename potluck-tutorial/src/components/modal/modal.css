@@ -48,16 +48,13 @@
 }
 
 .modal-main input {
+  border: 1px solid grey;
   display: block;
   font-size: 1.08rem;
   min-height: 35px;
   margin: 10px 0;
   padding: 5px;
-}
-
-.modal-main input {
-  width: 60%;
-  border: 1px solid grey;
+  width: 100%;
 }
 
 .display-block {

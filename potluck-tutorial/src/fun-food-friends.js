@@ -7,9 +7,10 @@
  * TODOs:
  * 0. Login page - basically done / working right now :D.
  * 1. Account Info page - keep working on it, finish styling it, etc
- * 2. Forgot Password button/link (new page or modal)
+ * 2. Forgot Password link (new page) - started it
  * 
- * * DONE-  Sign-up page - Linked from the login modal.
+ * Done:
+ * * Sign-up page - Linked from the login modal.
  */
 
 import React, { Component } from 'react';
@@ -40,91 +41,91 @@ class FunFood extends Component {
   }
 
   render() {
-    // console.log("Render called");
     return (
-      <div className='app'>
-        <header className="my-header">
-          <h1>Fun Food Friends</h1>
-          {this.state.user ?
-            <span className="logout-section">
-              <Link to="/account-settings">{this.state.user.email}</Link>
-              <button onClick={this.logOut}>Log Out</button>
-            </span>
-            :
-            <button onClick={this.showModal}>Log In</button>
-            // <Link to="/login">Log In</Link>
-          }
-        </header>
+      <div>
+        <main className='app'>
+          <header className="my-header">
+            <h1>Fun Food Friends</h1>
+            {this.state.user ?
+              <span className="logout-section">
+                <Link to="/account-settings">{this.state.user.email}</Link>
+                <button onClick={this.logOut}>Log Out</button>
+              </span>
+              :
+              <button onClick={this.showModal}>Log In</button>
+              // <Link to="/login">Log In</Link>
+            }
+          </header>
 
-        {this.state.user ?
-          <div className='container'>
-            <section className='add-item'>
-              <form onSubmit={this.handleSubmit}>
-                <input type="text" className="user-input" 
-                  name="currentItem" placeholder="What are you bringing?" 
-                  onChange={this.handleChange} value={this.state.currentItem} />
-                
-                {this.state.user.displayName ? 
-                  <p>User: {this.state.user.displayName}</p>
-                  :
-                  <p>User: {this.state.user.email}</p>
-                }
-                
-                <button className="form-button">Add Item</button>
-              </form>
-            </section>
-            
-            <section className='display-item'>
-              <div className='wrapper'>
-                <ul className="item-list">
-                  {this.state.items.map(item => {
-                    return (
-                      <li className="food-item" key={item.id}>
-                        <h3 className="item-header">{item.itemName}</h3>
-                        { item.userName ? 
-                          <p>Brought by: {item.userName}</p>
-                          :
-                          <p>Brought by: {item.userEmail}</p>
-                        }
-                                                
-                        { item.userEmail === this.state.user.email ?
-                          <button type="button" className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
-                          :
-                          null
-                        }
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            </section>
-          </div>
-          :
-          <div className='container'>
-            <p>Please log in to see the potluck list and submit to it.</p>
-          </div>
-        }
+          {this.state.user ?
+            <div className='container'>
+              <section className='add-item'>
+                <form onSubmit={this.handleSubmit}>
+                  <input type="text" className="user-input" 
+                    name="currentItem" placeholder="What are you bringing?" 
+                    onChange={this.handleChange} value={this.state.currentItem} />
+                  
+                  {this.state.user.displayName ? 
+                    <p>User: {this.state.user.displayName}</p>
+                    :
+                    <p>User: {this.state.user.email}</p>
+                  }
+                  
+                  <button className="form-button">Add Item</button>
+                </form>
+              </section>
+              
+              <section className='display-item'>
+                <div className='wrapper'>
+                  <ul className="item-list">
+                    {this.state.items.map(item => {
+                      return (
+                        <li className="food-item" key={item.id}>
+                          <h3 className="item-header">{item.itemName}</h3>
+                          { item.userName ? 
+                            <p>Brought by: {item.userName}</p>
+                            :
+                            <p>Brought by: {item.userEmail}</p>
+                          }
+                                                  
+                          { item.userEmail === this.state.user.email ?
+                            <button type="button" className="remove-button" onClick={() => this.removeItem(item.id)}>Remove Item</button>
+                            :
+                            null
+                          }
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </section>
+            </div>
+            :
+            <div className='container'>
+              <p>Please log in to see the potluck list and submit to it.</p>
+            </div>
+          }
+        </main>
 
         <Modal show={this.state.showLoginModal} handleClose={this.hideModal}>
           <h1>Log In</h1>
-          
-          <label htmlFor="user-email">Email:</label>
+
+          <label htmlFor="user-email">Email</label>
           <input id="user-email" type="email"></input>
 
           <label htmlFor="user-password">
-            <span>Password:   </span>
-            <Link to="/forgot-password">Forgot Password</Link>
+            <span>Password   </span>
+            <Link to="/forgot-password">(Forgot Password)</Link>
           </label>
           <input id="user-password" type="password"></input> 
 
           <p className="error">{this.state.loginErrorMessage}</p>
 
-          <button className="login-btn" onClick={this.logIn}>Log In</button>
+          <button className="btn login-btn" onClick={this.logIn} type="button">Log In</button>
           <br></br>
-          
+
           <span>Don't have an account?  </span><Link to="/sign-up" className="modal-link-btn">Sign Up</Link>
         </Modal>
-
       </div>
     );
   }
