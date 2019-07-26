@@ -20,7 +20,20 @@
   transition: all .6s;
 }
 
-.modal-main button {
+.modal-main .login-btn {
+  background-color: cornflowerblue !important;
+  color: white !important;
+  width: 100%;
+}
+
+.close-btn {
+  float: right;
+  margin: 0;
+  min-width: 0px;
+  border: 0;
+}
+
+.modal-main .btn {
   background-color: white;
   border: 0;
   color: darkslategrey;
@@ -30,24 +43,16 @@
   margin: 5px 0;
 }
 
+.btn:hover {
+  filter: brightness(85%);
+}
+
 .modal-main input {
   display: block;
   font-size: 1.08rem;
   min-height: 35px;
   margin: 10px 0;
-}
-
-.login-btn {
-  background-color: cornflowerblue;
-  color: white;
-  width: 100%;
-}
-
-.close-btn {
-  float: right;
-  margin: 0;
-  min-width: 0px;
-  border: 0;
+  padding: 5px;
 }
 
 .modal-main input {

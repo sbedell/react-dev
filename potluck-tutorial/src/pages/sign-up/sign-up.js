@@ -68,14 +68,9 @@ class SignUpPage extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    // console.log("e.target", e.target);
-
     let userEmail = this.state.userEmail.trim();
     let password = document.getElementById("user-password").value.trim();
     let passConfirm = document.getElementById("pass-confirm").value.trim();
-    
-    // console.log("User email: ", userEmail);
-    // console.log("Do the passwords match? ", password === passConfirm);
 
     if (!userEmail) {
       this.setState({signUpErrorMessage: "Please enter an email address"});
