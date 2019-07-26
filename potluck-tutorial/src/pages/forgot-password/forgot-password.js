@@ -1,5 +1,5 @@
 import React from 'react';
-// import { Redirect } from "react-router-dom";
+// import { Redirect, Link } from "react-router-dom";
 
 import firebase from '../../firebase.js';
 import "./forgot-password.css";
@@ -11,18 +11,16 @@ class ForgotPasswordPage extends React.Component {
     this.state = {
       userEmail: "",
       userEmailConfirm: "",
-      errorMessage: ""
+      errorMessage: "",
+      resetEmailSent: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.sendResetPasswordEmail = this.sendResetPasswordEmail.bind(this);
   }
 
   render() {
-    // if (this.state.successfulSignup) {
-    //   return <Redirect to="/" />;
-    // }
-
     return (
       <main className="forgot-password-page">
         <h1>Forgot Password?</h1>
@@ -30,13 +28,13 @@ class ForgotPasswordPage extends React.Component {
 
         <form onSubmit={this.handleSubmit}>
           <div className="user-input-section">
-            <label>Email:</label>
+            <label>Email</label>
             <input type="email" name="userEmail"
                 value={this.state.userEmail} onChange={this.handleChange} />
           </div>
 
           <div className="user-input-section">
-            <label>Confirm Email:</label>
+            <label>Confirm Email</label>
             <input type="email" name="userEmailConfirm"
                 value={this.state.userEmailConfirm} onChange={this.handleChange} />
           </div>
@@ -49,24 +47,40 @@ class ForgotPasswordPage extends React.Component {
     );
   }
 
-  handleSubmit(e) {
-    console.log("e: ", e);
-  }
-
   handleChange(e) {
-    console.log("e: ", e);
-  }
-}
-
-function sendResetPasswordEmail() {
-  let emailAddress = " ";
-
-  if (window.confirm("Are you sure you want to reset your password?")) {
-    firebase.auth().sendPasswordResetEmail(emailAddress).then(() => {
-      console.log("Password reset email sent...");
-    }).catch(error => {
-      console.error("Error sending password reset email: ", error);
+    this.setState({
+      [e.target.name]: e.target.value
     });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+
+    let userEmail = this.state.userEmail.trim();
+    let userEmailConfirm = this.state.userEmailConfirm.trim();
+
+    if (!userEmail) {
+      this.setState({ errorMessage: "Error: Please enter an email address!" });
+    } else if (userEmail === userEmailConfirm) {
+      this.sendResetPasswordEmail(userEmail);
+    } else {
+      this.setState({ errorMessage: "Error: Email addresses don't match!" });
+    }   
+  }
+
+  sendResetPasswordEmail(emailAddress) {
+    if (emailAddress && window.confirm("Are you sure you want to reset your password?")) {
+      firebase.auth().sendPasswordResetEmail(emailAddress).then(() => {
+        this.setState({
+          errorMessage: "",
+          resetEmailSent: true
+        });
+        alert("Password reset email sent. Hit the back button to go back home.");
+      }).catch(error => {
+        console.error("Error sending password reset email: ", error);
+        this.setState({ errorMessage: `Error: ${error.message}`});
+      });
+    }
   }
 }
 

@@ -77,7 +77,7 @@ class AccountSettings extends React.Component {
                       <input id="current-password" type="password"></input>
                     </div>
                     
-                    <button type="button">Save New Email</button>
+                    <button type="button" onClick={this.updateEmailAddr}>Save New Email</button>
                     <button name="editEmail" onClick={this.cancelEdit}>Cancel</button>
                   </div>
                   :
@@ -92,7 +92,7 @@ class AccountSettings extends React.Component {
                   :
                   <span>
                     <span>No</span>
-                    <button type="button">Send Verification Email</button>
+                    <button type="button" onClick={this.sendVerificationEmail}>Send Verification Email</button>
                   </span>
                 }
               </div>
@@ -149,7 +149,7 @@ class AccountSettings extends React.Component {
    * "You can update a user's basic profile information - 
    * the user's display name and profile photo URL - with the updateProfile method."
    */
-  saveUsername(e) {
+  saveUsername() {
     // console.log("saveUsername. e.target: ", e.target);
     let newUsername = document.getElementById("username-input").value.trim();
 
@@ -175,11 +175,13 @@ class AccountSettings extends React.Component {
     }
   }
 
-  updateEmail(newEmailAddr) {
+  updateEmailAddr() {
     let user = firebase.auth().currentUser;
+    let newEmail = document.getElementById("input-new-email").value.trim();
+    let newEmailConfirm = "";
     
-    if (newEmailAddr) {
-      user.updateEmail(newEmailAddr).then(() => {
+    if (newEmail === newEmailConfirm) {
+      user.updateEmail(newEmail).then(() => {
         console.log("Successfully updated profile - updated email address");
 
         this.setState({ editEmail: false });
@@ -189,17 +191,18 @@ class AccountSettings extends React.Component {
     }
   }
 
-  /*
   sendVerificationEmail() {
     let user = firebase.auth().currentUser;
 
-    user.sendEmailVerification().then(() => {
-      // Email sent.
-    }).catch(error => {
-      console.error("Error sending verification email: ", error);
-    });
+    if (window.confirm("Do you want to send a verification email?")) {
+      user.sendEmailVerification().then(() => {
+        console.log("Verification email sent");
+        // probably want to send the user a message on the screen too.
+      }).catch(error => {
+        console.error("Error sending verification email: ", error);
+      });
+    }
   }
-  */
 
   // Might want to force user to re-auth before doing this?
   // like 1. type oldpass, 2. check it, 3. type newpass
