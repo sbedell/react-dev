@@ -5,6 +5,7 @@ body {
 
 ol, ul {
   padding-left: 30px;
+  margin-top: 0;
 }
 
 .board-row:after {
@@ -13,13 +14,27 @@ ol, ul {
   display: table;
 }
 
-.status {
-  margin-bottom: 10px;
+.current-move {
+  font-weight: bold;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+
+.game-status {
+  margin-top: 15px; 
 }
 
 .square {
   background: #fff;
-  border: 1px solid #999;
+  border: 1px solid rgb(68, 68, 68);
   float: left;
   font-size: 24px;
   font-weight: bold;
@@ -40,23 +55,10 @@ ol, ul {
   color: blue;
 }
 
-.current-move {
-  font-weight: bold;
-}
-
 .winning-square {
   background-color: lightcoral;
 }
 
 .kbd-navigation .square:focus {
   background: #ddd;
-}
-
-.game {
-  display: flex;
-  flex-direction: row;
-}
-
-.game-info {
-  margin-left: 20px;
 }

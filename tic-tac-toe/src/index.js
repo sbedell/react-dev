@@ -7,7 +7,7 @@
  * which are listed in order of increasing difficulty:
  *  1. Display the location for each move in the format (col, row) in the move history list.
  *  DONE - 2. Bold the currently selected item in the move list.
- *  3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
+ *  Not Doing, pointless lol - 3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
  *  4. Add a toggle button that lets you sort the moves in either ascending or descending order.
  *  DONE - 5. When someone wins, highlight the three squares that caused the win.
  *  DONE - 6. When no one wins, display a message about the result being a draw.
@@ -60,12 +60,9 @@ class Board extends React.Component {
   }
 
   renderSquare(i) {
-    // console.log("i: ", );
-    // console.log("this.props.winningSquares: ", this.props.winningSquares);
     if (this.props.winningSquares) {
       for (let x = 0; x < this.props.winningSquares.length; x++) {
         if (this.props.winningSquares[x] === i) {
-          // console.log("MATCH");
           return (
             <Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} isWinningSquare={true} />
           )
@@ -126,15 +123,17 @@ class Game extends React.Component {
     }
     
     return (
-      <div className="game">
-        <div className="game-board">
+      <main className="game">
+        <section>
           <Board squares={current.squares} onClick={(i) => this.handleClick(i)} winningSquares={winningSquares} />
-        </div>
-        <div className="game-info">
-          <div>{status}</div>
+          
+          <div className="game-status">{status}</div>
+        </section>
+        
+        <section className="game-info">
           <ol>{moves}</ol>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
