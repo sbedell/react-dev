@@ -95,7 +95,7 @@ class Game extends React.Component {
 
       let btnClassName = "move-btn";
       if (this.state.stepNumber === move) {
-        btnClassName = "current-move";
+        btnClassName += " current-move";
       }
 
       return (

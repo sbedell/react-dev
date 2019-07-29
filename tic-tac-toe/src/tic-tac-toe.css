@@ -1,5 +1,6 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
+  font-size: 14px;
+  font-family: "Century Gothic", Futura, sans-serif;
   margin: 20px;
 }
 
@@ -9,12 +10,23 @@ ul {
   list-style: none;
 }
 
-.todo-move-btn, .todo-current-move {
+.move-btn {
   background-color: lightblue;
-  border-radius: 8px;
-  border: 2px solid gray;
-  box-shadow: 3px 3px 3px gray;
-  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid gray;
+  box-shadow: 1px 1px 1px grey;
+  cursor: pointer;
+  margin-bottom: 3px;
+  padding: 2px;
+  width: 135px;
+}
+
+.move-btn:hover {
+  filter: brightness(85%);
+}
+
+.move-btn:active {
+  box-shadow: inset 0 0 7px grey;
 }
 
 .board-row:after {
