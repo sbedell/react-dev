@@ -5,12 +5,15 @@
  * https://reactjs.org/docs/state-and-lifecycle.html
  * 
  * TODOs:
- * 0. Login page - basically done / working right now :D.
  * 1. Account Info page - keep working on it, finish styling it, etc
- * 2. Forgot Password link (new page) - started it
+ * 2. Login PAGE - Started, might not even use it. The modal is fine right now.
  * 
  * Done:
- * * Sign-up page - Linked from the login modal.
+ * Login Modal - done
+ * Sign-up page - Linked from the login modal.
+ * Forgot Password link (new page) - basically done.
+ *  - Tested positive (forgot pw email sent)
+ *    and negative (incorrect / nonexistant email) test scenarios and both work.
  */
 
 import React, { Component } from 'react';
