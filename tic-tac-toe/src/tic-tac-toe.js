@@ -7,7 +7,6 @@
  * which are listed in order of increasing difficulty:
  *  1. Display the location for each move in the format (col, row) in the move history list.
  *  DONE - 2. Bold the currently selected item in the move list.
- *  Not Doing, pointless lol - 3. Rewrite Board to use two loops to make the squares instead of hardcoding them.
  *  4. Add a toggle button that lets you sort the moves in either ascending or descending order.
  *  DONE - 5. When someone wins, highlight the three squares that caused the win.
  *  DONE - 6. When no one wins, display a message about the result being a draw.
@@ -89,9 +88,9 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    
+
     const moves = history.map((step, move) => {
-      const desc = move ? 'Go to move #' + move : 'Go to game start';
+      const desc = move ? `Go to move #${move}` : 'Go to game start';
 
       let btnClassName = "move-btn";
       if (this.state.stepNumber === move) {
