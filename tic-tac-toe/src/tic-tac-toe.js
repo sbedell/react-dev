@@ -5,7 +5,7 @@
  * If you have extra time or want to practice your new React skills, here are some 
  * ideas for improvements that you could make to the tic-tac-toe game,
  * which are listed in order of increasing difficulty:
- *  1. Display the location for each move in the format (col, row) in the move history list.
+ *  DONE - 1. Display the location for each move in the format (col, row) in the move history list.
  *  DONE - 2. Bold the currently selected item in the move list.
  *  4. Add a toggle button that lets you sort the moves in either ascending or descending order.
  *  DONE - 5. When someone wins, highlight the three squares that caused the win.
@@ -79,7 +79,7 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
-        pastMove: {
+        move: {
           player: null,
           row: null,
           col: null
@@ -95,7 +95,9 @@ class Game extends React.Component {
     const current = history[this.state.stepNumber];
 
     const moves = history.map((step, move) => {
-      const desc = move ? `Go to move #${move}` : 'Go to game start';
+      const desc = move ? `Go to move #${move}. ${step.move.player} 
+                        (${step.move.col}, ${step.move.row})` 
+        : 'Go to game start';
 
       let btnClassName = "move-btn";
       if (this.state.stepNumber === move) {
@@ -147,13 +149,18 @@ class Game extends React.Component {
       return;
     }
 
-    // let player = this.state.xIsNext ? 'X' : 'O';
-    // let position = calculatePosition(i);
-    newSquares[i] = this.state.xIsNext ? 'X' : 'O';
+    let playerXO = this.state.xIsNext ? 'X' : 'O';
+    let position = calculatePosition(i);
+    newSquares[i] = playerXO;
     
     this.setState({
       history: history.concat([{
         squares: newSquares,
+        move: {
+          player: playerXO,
+          row: position.row,
+          col: position.col
+        }
       }]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
