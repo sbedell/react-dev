@@ -79,6 +79,11 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        pastMove: {
+          player: null,
+          row: null,
+          col: null
+        }
       }],
       stepNumber: 0,
       xIsNext: true
@@ -142,6 +147,8 @@ class Game extends React.Component {
       return;
     }
 
+    // let player = this.state.xIsNext ? 'X' : 'O';
+    // let position = calculatePosition(i);
     newSquares[i] = this.state.xIsNext ? 'X' : 'O';
     
     this.setState({
@@ -186,6 +193,21 @@ function calculateWinner(squares) {
   }
 
   return null;
+}
+
+function calculatePosition(i) {
+  switch(i) {
+    case 0: return { row: 1, col: 1 };
+    case 1: return { row: 1, col: 2 };
+    case 2: return { row: 1, col: 3 };
+    case 3: return { row: 2, col: 1 };
+    case 4: return { row: 2, col: 2 };
+    case 5: return { row: 2, col: 3 };
+    case 6: return { row: 3, col: 1 };
+    case 7: return { row: 3, col: 2 };
+    case 8: return { row: 3, col: 3 };
+    default: return { row: 0, col: 0}; // basically an error...
+  }
 }
 
 export default Game;
