@@ -5,11 +5,10 @@
  * If you have extra time or want to practice your new React skills, here are some 
  * ideas for improvements that you could make to the tic-tac-toe game,
  * which are listed in order of increasing difficulty:
- *  DONE - 1. Display the location for each move in the format (col, row) in the move history list.
- *  DONE - 2. Bold the currently selected item in the move list.
- *  4. Add a toggle button that lets you sort the moves in either ascending or descending order.
- *  DONE - 5. When someone wins, highlight the three squares that caused the win.
- *  DONE - 6. When no one wins, display a message about the result being a draw.
+ *  DONE - Display the location for each move in the format (col, row) in the move history list.
+ *  DONE - Bold the currently selected item in the move list.
+ *  DONE - When someone wins, highlight the three squares that caused the win.
+ *  DONE - When no one wins, display a message about the result being a draw.
  */
 
 import React from 'react';
