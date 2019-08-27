@@ -21,7 +21,8 @@ class AccountSettings extends React.Component {
     this.state = {
       currentUser: firebase.auth().currentUser,
       editEmail: false,
-      editUsername: false
+      editUsername: false,
+      emailErrorMessage: ""
     };
 
     this.openEditMode = this.openEditMode.bind(this);
@@ -47,7 +48,7 @@ class AccountSettings extends React.Component {
                     <input type="text" id="username-input"></input>
                     
                     <div>
-                      <button name="save-username" onClick={this.saveUsername} type="button">Save New Username</button>
+                      <button name="save-username" onClick={this.saveUsername} type="button">Save</button>
                       <button name="editUsername" onClick={this.cancelEdit} type="button">Cancel</button>
                     </div>
                   </div>
@@ -56,34 +57,38 @@ class AccountSettings extends React.Component {
                 }
               </div>
 
-              <div className="profile-info-section">
-                <label htmlFor="user-email">Email: </label>
-                <span>{this.state.currentUser.email}</span>
-
-                {this.state.editEmail ?
-                  <div className="edit-section">
-                    <div>
-                      <label htmlFor="input-new-email">New Email:</label>
-                      <input id="input-new-email" type="email"></input>
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="input-new-email-confirm">Confirm New Email:</label>
-                      <input id="input-new-email-confirm" type="email"></input>
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="current-password">Current Password:</label>
-                      <input id="current-password" type="password"></input>
-                    </div>
-                    
+              {/* <div className="profile-info-section"> */}
+              {this.state.editEmail ?
+                <div className="profile-info-section">
+                  <div className="input-section">
+                    <label htmlFor="input-new-email">New Email:</label>
+                    <input id="input-new-email" type="email" required></input>
+                  </div>
+                  
+                  <div className="input-section">
+                    <label htmlFor="input-new-email-confirm">Confirm New Email:</label>
+                    <input id="input-new-email-confirm" type="email" required></input>
+                  </div>
+                  
+                  <div className="input-section">
+                    <label htmlFor="current-password-email">Current Password:</label>
+                    <input id="current-password-email" type="password" required></input>
+                  </div>
+                  
+                  <div>
                     <button type="button" onClick={this.updateEmailAddr}>Save New Email</button>
                     <button name="editEmail" onClick={this.cancelEdit}>Cancel</button>
+                    <p>{this.state.emailErrorMessage}</p>
                   </div>
-                  :
+                </div>
+                :
+                <div className="profile-info-section">
+                  <label htmlFor="user-email">Email:</label>
+                  <span>{this.state.currentUser.email}</span>
                   <button name="editEmail" onClick={this.openEditMode}>Edit Email</button>
-                }
-              </div>
+                </div>
+              }
+              {/* </div> */}
 
               <div className="profile-info-section">
                 <label>Email Verified: </label>
@@ -177,8 +182,9 @@ class AccountSettings extends React.Component {
 
   updateEmailAddr() {
     let user = firebase.auth().currentUser;
-    let newEmail = document.getElementById("input-new-email").value.trim();
-    let newEmailConfirm = "";
+    let newEmail = document.getElementById("input-new-email").value;
+    let newEmailConfirm = document.getElementById("imput-new-email-confirm").value;
+    let password = document.getElementById("current-password-email").value;
     
     if (newEmail === newEmailConfirm) {
       user.updateEmail(newEmail).then(() => {
